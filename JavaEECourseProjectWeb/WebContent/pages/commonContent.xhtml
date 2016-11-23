@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:head>
+	<link href="#{application.contextPath}/css/common.css" rel="stylesheet"
+		type="text/css" />
+	<link href="#{application.contextPath}/css/bootstrap.css"
+		rel="stylesheet" type="text/css" />
+</h:head>
+<body>
+	style="margin: 5% 5% 5% 5%;" />
+	<ui:composition>
+		<h:form styleClass="commonForm">
+			<h:panelGroup layout="block">
+				<p:commandButton ajax="false" action="/pages/login.html"
+					styleClass="btn btn-info" value="#{msgs['button.login']}"
+					style="margin: 5% 5% 5% 5%;" />
+				<p:commandButton ajax="false" id="createUserBtn"
+					styleClass="btn btn-primary createUserBtn"
+					value="#{msgs['button.register']}" action="/pages/register.html"
+					style="margin: 5% 5% 5% 5%;" />
+			</h:panelGroup>
+
+			<h:panelGroup layout="block">
+
+				<p:dataTable var="post" value="#{listPostsBean.getAllPosts()}"
+					rows="10" widgetVar="postsTable" paginator="true"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					paginatorPosition="bottom" rowsPerPageTemplate="5,10,15"
+					styleClass="listPostsTable" id="listPostsTable">
+
+					<f:facet name="header">
+						<p:outputPanel>
+							<h:outputText value="Search all fields:" />
+							<p:inputText id="globalFilter"
+								onkeyup="PF('postsTable').filter()" style="width:150px"
+								placeholder="Enter keyword" />
+						</p:outputPanel>
+					</f:facet>
+
+					<p:column headerText="#{msgs['post.date']}" width="200">
+						<h:outputText value="#{post.date}" />
+					</p:column>
+
+					<p:column headerText="#{msgs['post.title']}">
+						<h:outputText value=" #{post.title}" />
+					</p:column>
+
+					<p:column headerText="#{msgs['post.author']}" width="300">
+						<h:outputText value=" #{post.author.username}" />
+					</p:column>
+
+					<p:column exportable="false" styleClass="colType"
+						style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="#{msgs.columns_actions}" />
+						</f:facet>
+
+						<p:commandLink ajax="false" process="@this" immediate="true"
+							action="#{listPostsBean.viewAction()}" id="viewButton">
+							<f:param name="id" value="#{post.id}" />
+							<h:graphicImage value="/img/view-icon.png"
+								title="#{msgs['button.view']}" alt="#{msgs['button.view']}"
+								width="20" height="20" />
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>
+			</h:panelGroup>
+		</h:form>
+	</ui:composition>
+</body>
+</html>
